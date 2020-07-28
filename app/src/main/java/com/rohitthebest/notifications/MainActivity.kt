@@ -3,6 +3,7 @@ package com.rohitthebest.notifications
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -63,9 +64,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     REQUEST_CODE, broadcastIntent, PendingIntent.FLAG_UPDATE_CURRENT
                 )
 
+                //Setting BigIcon
+                val largeIcon =
+                    BitmapFactory.decodeResource(resources, R.drawable.study_related_icon)
+
+
                 val notification: Notification =
                     NotificationCompat.Builder(this, CHANNEL1)
                         .setSmallIcon(R.mipmap.ic_launcher)
+                        .setLargeIcon(largeIcon)
+                        .setStyle(
+                            NotificationCompat.BigTextStyle()
+                                .bigText(getString(R.string.dummy_large_text))
+                                .setBigContentTitle("Big content title")
+                                .setSummaryText("Summary text")
+                        ) // Setting BigTextStyle()
                         .setContentTitle(editTextTitle.text.toString().trim())
                         .setContentText(editTextDesc.text.toString().trim())
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -74,7 +87,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                         .setContentIntent(contentIntent)   //triggered when user clicks on notification
                         .setAutoCancel(true)  //Notification is not visible after the user clicks on notification
                         .setOnlyAlertOnce(true)
-                        .addAction(R.mipmap.ic_launcher, "Toast", actionIntent) //Adding actions : Max actions = 3
+                        .addAction(
+                            R.mipmap.ic_launcher,
+                            "Toast",
+                            actionIntent
+                        ) //Adding actions : Max actions = 3
                         .build()
 
                 notificationManager.notify(1, notification)
@@ -84,6 +101,19 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 val notification =
                     NotificationCompat.Builder(this, CHANNEL2)
                         .setSmallIcon(R.mipmap.ic_launcher)
+                        .setStyle(
+                            NotificationCompat.InboxStyle()
+                                .addLine("line 1")
+                                .addLine("line 2")
+                                .addLine("line 3")
+                                .addLine("line 4")
+                                .addLine("line 5")
+                                .addLine("line 6")
+                                .addLine("line 7")
+                                .addLine("line 8")
+                                .setBigContentTitle("Big content title")
+                                .setSummaryText("Summary text")
+                        )
                         .setContentTitle(editTextTitle.text.toString().trim())
                         .setContentText(editTextDesc.text.toString().trim())
                         .setPriority(NotificationCompat.PRIORITY_LOW)
