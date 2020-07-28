@@ -7,6 +7,7 @@ import android.os.Build
 import com.rohitthebest.notifications.others.Constants.CHANNEL1
 import com.rohitthebest.notifications.others.Constants.CHANNEL2
 import com.rohitthebest.notifications.others.Constants.CHANNEL3
+import com.rohitthebest.notifications.others.Constants.CHANNEL4
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class BaseApplication : Application() {
@@ -48,11 +49,22 @@ class BaseApplication : Application() {
 
             channel3.description = "This is Channel 3"
 
+            val channel4 =
+                NotificationChannel(
+                    CHANNEL4,
+                    "Channel 4",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+
+            channel4.description = "This is Channel 4"
+
+
             val notificationManager = getSystemService(NotificationManager::class.java)
 
             notificationManager.createNotificationChannel(channel1)
             notificationManager.createNotificationChannel(channel2)
             notificationManager.createNotificationChannel(channel3)
+            notificationManager.createNotificationChannel(channel4)
 
         }
     }

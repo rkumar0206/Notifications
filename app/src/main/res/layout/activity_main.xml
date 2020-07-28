@@ -38,9 +38,9 @@
         android:id="@+id/channel1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Channel 1"
-        app:layout_constraintBottom_toTopOf="@+id/channel2"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/channel2"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextDesc" />
@@ -49,21 +49,32 @@
         android:id="@+id/channel2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Channel 2"
-        app:layout_constraintBottom_toTopOf="@+id/channel3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/channel1" />
+        app:layout_constraintStart_toEndOf="@+id/channel1"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDesc" />
 
     <Button
         android:id="@+id/channel3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Channel 3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/channel4ProgressNotificationBtn"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/channel1" />
+
+    <Button
+        android:id="@+id/channel4ProgressNotificationBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Progress Notification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/channel3"
         app:layout_constraintTop_toBottomOf="@+id/channel2" />
 </androidx.constraintlayout.widget.ConstraintLayout>
