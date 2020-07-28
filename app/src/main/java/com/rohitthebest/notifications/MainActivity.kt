@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
+import android.support.v4.media.session.MediaSessionCompat
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
@@ -20,6 +21,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), View.OnClickListener {
 
     private lateinit var notificationManager: NotificationManagerCompat
+    private lateinit var mediaSessionCompat: MediaSessionCompat
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +33,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         channel1.setOnClickListener(this)
         channel2.setOnClickListener(this)
         channel3.setOnClickListener(this)
+
+        mediaSessionCompat = MediaSessionCompat(this, "MediaSessionCompat")
     }
 
     override fun onClick(v: View?) {
@@ -96,23 +101,21 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 notificationManager.notify(1, notification)
             }
+
             channel2.id -> {
+
+                val picture =
+                    BitmapFactory.decodeResource(resources, R.drawable.study_related_icon)
+
 
                 val notification =
                     NotificationCompat.Builder(this, CHANNEL2)
                         .setSmallIcon(R.mipmap.ic_launcher)
+                        .setLargeIcon(picture)
                         .setStyle(
-                            NotificationCompat.InboxStyle()
-                                .addLine("line 1")
-                                .addLine("line 2")
-                                .addLine("line 3")
-                                .addLine("line 4")
-                                .addLine("line 5")
-                                .addLine("line 6")
-                                .addLine("line 7")
-                                .addLine("line 8")
-                                .setBigContentTitle("Big content title")
-                                .setSummaryText("Summary text")
+                            NotificationCompat.BigPictureStyle()
+                                .bigPicture(picture)
+                                .bigLargeIcon(null)
                         )
                         .setContentTitle(editTextTitle.text.toString().trim())
                         .setContentText(editTextDesc.text.toString().trim())
@@ -126,11 +129,26 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
             channel3.id -> {
 
+                val playerThumnail =
+                    BitmapFactory.decodeResource(resources, R.drawable.study_related_icon)
+
                 val notification =
                     NotificationCompat.Builder(this, CHANNEL3)
                         .setSmallIcon(R.mipmap.ic_launcher)
                         .setContentTitle(editTextTitle.text.toString().trim())
                         .setContentText(editTextDesc.text.toString().trim())
+                        .setLargeIcon(playerThumnail)
+                        .addAction(R.drawable.ic_baseline_dislike_24, "Dislike", null)
+                        .addAction(R.drawable.ic_baseline_skip_previous_24, "Previous", null)
+                        .addAction(R.drawable.ic_baseline_pause_24, "Pause", null)
+                        .addAction(R.drawable.ic_baseline_skip_next_24, "Next", null)
+                        .addAction(R.drawable.ic_baseline_like_24, "Like", null)
+                        .setStyle(
+                            androidx.media.app.NotificationCompat.MediaStyle()
+                                .setShowActionsInCompactView(1, 2, 3)
+                                .setMediaSession(mediaSessionCompat.sessionToken)
+                        )
+                        .setSubText("Sub Text")
                         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                         .setCategory(NotificationCompat.CATEGORY_MESSAGE)
                         .build()
