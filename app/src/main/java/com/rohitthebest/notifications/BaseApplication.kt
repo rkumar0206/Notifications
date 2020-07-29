@@ -8,6 +8,7 @@ import com.rohitthebest.notifications.others.Constants.CHANNEL1
 import com.rohitthebest.notifications.others.Constants.CHANNEL2
 import com.rohitthebest.notifications.others.Constants.CHANNEL3
 import com.rohitthebest.notifications.others.Constants.CHANNEL4
+import com.rohitthebest.notifications.others.Constants.CHANNEL5
 
 @Suppress("RECEIVER_NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
 class BaseApplication : Application() {
@@ -58,6 +59,14 @@ class BaseApplication : Application() {
 
             channel4.description = "This is Channel 4"
 
+            val channel5 =
+                NotificationChannel(
+                    CHANNEL5,
+                    "Channel 5",
+                    NotificationManager.IMPORTANCE_DEFAULT
+                )
+
+            channel4.description = "This is Channel 5"
 
             val notificationManager = getSystemService(NotificationManager::class.java)
 
@@ -65,6 +74,7 @@ class BaseApplication : Application() {
             notificationManager.createNotificationChannel(channel2)
             notificationManager.createNotificationChannel(channel3)
             notificationManager.createNotificationChannel(channel4)
+            notificationManager.createNotificationChannel(channel5)
 
         }
     }

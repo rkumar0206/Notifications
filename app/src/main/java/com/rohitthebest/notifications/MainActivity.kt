@@ -16,6 +16,7 @@ import com.rohitthebest.notifications.others.Constants.CHANNEL1
 import com.rohitthebest.notifications.others.Constants.CHANNEL2
 import com.rohitthebest.notifications.others.Constants.CHANNEL3
 import com.rohitthebest.notifications.others.Constants.CHANNEL4
+import com.rohitthebest.notifications.others.Constants.CHANNEL5
 import com.rohitthebest.notifications.others.Constants.MESSAGE_KEY
 import com.rohitthebest.notifications.others.Constants.REQUEST_CODE
 import kotlinx.android.synthetic.main.activity_main.*
@@ -36,6 +37,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         channel2.setOnClickListener(this)
         channel3.setOnClickListener(this)
         channel4ProgressNotificationBtn.setOnClickListener(this)
+        channel5GroupNotification.setOnClickListener(this)
 
         mediaSessionCompat = MediaSessionCompat(this, "MediaSessionCompat")
     }
@@ -205,6 +207,92 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     notificationManager.notify(4, notificationBuilder.build())
 
                 }).start()
+            }
+
+            channel5GroupNotification.id -> {
+
+
+                /**For API level greater than 23 the groups are made automatically but in lower API groups
+                are not created automatically, but we will have to make it ourselves.
+                 **/
+/*
+
+                val notification =
+                    NotificationCompat.Builder(this, CHANNEL5)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle(editTextTitle.text.toString().trim())
+                        .setContentText(editTextDesc.text.toString().trim())
+                        .setPriority(NotificationCompat.PRIORITY_LOW)
+                        .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                        .build()
+
+
+
+                for (i in 0 until 5) {
+
+                    SystemClock.sleep(1000)
+                    notificationManager.notify(i, notification)
+
+                }
+*/
+
+                /**
+                 * Making Group notification manually
+                 */
+
+                val title1 = "title 1"
+                val message1 = "message 1"
+                val title2 = "title 2"
+                val message2 = "message 2"
+
+
+                val notification1 = NotificationCompat.Builder(this, CHANNEL5)
+                    .setContentTitle(title1)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentText(message1)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setGroup("example_group")
+                    .build()
+
+                val notification2 = NotificationCompat.Builder(this, CHANNEL5)
+                    .setContentTitle(title2)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentText(message2)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setGroup("example_group")
+                    .build()
+
+                //We will have to make summary notification so that the notifications can be grouped.
+                //It is necessary for making groups
+
+                val activityIntent = Intent(this, MainActivity::class.java)
+                val contentIntent = PendingIntent.getActivity(
+                    this,
+                    REQUEST_CODE, activityIntent, 0
+                )
+
+                val summaryNotification = NotificationCompat.Builder(this, CHANNEL5)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setStyle(
+                        NotificationCompat.InboxStyle()
+                            .addLine("$title2 $message2")
+                            .addLine("$title1 $message1")
+                            .setBigContentTitle("2 new messages")
+                            .setSummaryText("user@example.com")
+
+                    )         //it is not necessary but inbox Style is very convenient for lower API for making groups
+                    .setGroupSummary(true)
+                    .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_CHILDREN)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setGroup("example_group")
+                    .setContentIntent(contentIntent)
+                    .setAutoCancel(true)
+                    .build()
+
+                notificationManager.notify(5, notification1)
+                notificationManager.notify(6, notification2)
+                notificationManager.notify(7, summaryNotification)
+
             }
         }
     }
