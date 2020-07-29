@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.support.v4.media.session.MediaSessionCompat
 import android.view.View
+import android.widget.RemoteViews
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -17,6 +18,7 @@ import com.rohitthebest.notifications.others.Constants.CHANNEL2
 import com.rohitthebest.notifications.others.Constants.CHANNEL3
 import com.rohitthebest.notifications.others.Constants.CHANNEL4
 import com.rohitthebest.notifications.others.Constants.CHANNEL5
+import com.rohitthebest.notifications.others.Constants.CHANNEL6
 import com.rohitthebest.notifications.others.Constants.MESSAGE_KEY
 import com.rohitthebest.notifications.others.Constants.REQUEST_CODE
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,6 +40,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         channel3.setOnClickListener(this)
         channel4ProgressNotificationBtn.setOnClickListener(this)
         channel5GroupNotification.setOnClickListener(this)
+        channel6CustomNotification.setOnClickListener(this)
 
         mediaSessionCompat = MediaSessionCompat(this, "MediaSessionCompat")
     }
@@ -293,6 +296,83 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 notificationManager.notify(6, notification2)
                 notificationManager.notify(7, summaryNotification)
 
+            }
+
+            channel6CustomNotification.id -> {
+
+                /**
+                 * There are some limitation in making custom layouts for notification
+                 * RemoteViews is limited to support for the following layouts:
+                 *
+                 *   {@link android.widget.AdapterViewFlipper}</li>
+                 *   {@link android.widget.FrameLayout}</li>
+                 *   {@link android.widget.GridLayout}</li>
+                 *   {@link android.widget.GridView}</li>
+                 *   {@link android.widget.LinearLayout}</li>
+                 *   {@link android.widget.ListView}</li>
+                 *   {@link android.widget.RelativeLayout}</li>
+                 *   {@link android.widget.StackView}</li>
+                 *   {@link android.widget.ViewFlipper}</li>
+                 *
+                 * <p>And the following widgets:</p>
+                 *
+                 *   {@link android.widget.AnalogClock}</li>
+                 *   {@link android.widget.Button}</li>
+                 *   {@link android.widget.Chronometer}</li>
+                 *   {@link android.widget.ImageButton}</li>
+                 *   {@link android.widget.ImageView}</li>
+                 *   {@link android.widget.ProgressBar}</li>
+                 *   {@link android.widget.TextClock}</li>
+                 *   {@link android.widget.TextView}</li>
+                 *
+                 * <p>Descendants of these classes are not supported.</p>
+                 */
+
+                val remoteViewsCollapsed = RemoteViews(
+                    packageName,
+                    R.layout.notification_collapsed
+                )
+
+                val remoteViewsExpanded = RemoteViews(
+                    packageName,
+                    R.layout.notification_expanded
+                )
+
+                //changing views texts and images dynamically
+                remoteViewsCollapsed.setTextViewText(
+                    R.id.textView_collapsed_1,
+                    "We can set the text dynamically."
+                )
+                remoteViewsExpanded.setImageViewResource(
+                    R.id.imageView_expanded,
+                    R.drawable.study_related_icon
+                )
+
+                //Setting Click Listeners
+
+                val clickIntent = Intent(this, NotificationReceiver::class.java)
+                clickIntent.putExtra(MESSAGE_KEY, "RemoteViews :  setting clicks.")
+
+                val pendingClickIntent = PendingIntent.getBroadcast(
+                    this,
+                    REQUEST_CODE,
+                    clickIntent,
+                    0
+                )
+
+                remoteViewsExpanded.setOnClickPendingIntent(
+                    R.id.imageView_expanded,
+                    pendingClickIntent
+                )
+
+                val notification = NotificationCompat.Builder(this, CHANNEL6)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setCustomContentView(remoteViewsCollapsed)
+                    .setCustomBigContentView(remoteViewsExpanded)
+                    .setStyle(NotificationCompat.DecoratedCustomViewStyle())
+                    .build()
+
+                notificationManager.notify(8, notification)
             }
         }
     }
