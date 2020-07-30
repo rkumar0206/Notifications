@@ -2,6 +2,7 @@ package com.rohitthebest.notifications
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
@@ -57,11 +58,17 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
                 val activityIntent = Intent(this, MainActivity::class.java)
 
-                //Pending Intent
-                val contentIntent: PendingIntent = PendingIntent.getActivity(
-                    this,
-                    REQUEST_CODE, activityIntent, 0
-                )   //flag = 0 , means we are not passing any flag
+                /* //Pending Intent
+                 val contentIntent: PendingIntent = PendingIntent.getActivity(
+                     this,
+                     REQUEST_CODE, activityIntent, 0
+                 )   //flag = 0 , means we are not passing any flag
+ */
+                //Another way to create pending intent
+                val contentIntent = TaskStackBuilder.create(this).run {
+                    addNextIntentWithParentStack(activityIntent)
+                    getPendingIntent(REQUEST_CODE, PendingIntent.FLAG_UPDATE_CURRENT)
+                }
 
 
                 /**
